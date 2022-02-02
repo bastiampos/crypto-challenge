@@ -1,6 +1,8 @@
 import { StyleSheet, Text, View, Image } from 'react-native';
-import React from 'react';
-// import { Currency } from '../interfaces';
+import React, {FC} from 'react';
+
+import Icon from 'react-native-vector-icons/Feather'
+Icon.loadFont()
 
 const CurrencyCard = ({currency}: any) => {
 
@@ -14,13 +16,13 @@ const CurrencyCard = ({currency}: any) => {
         </View>
       </View>
       <View>
-        <Text style={[styles.boldText]}>{`$${currency.metrics.market_data.price_usd && currency.metrics.market_data.price_usd.toFixed(0)}`}</Text>
-        <Text style={[
-          styles.span, 
-          {color: (currency.metrics.market_data.percent_change_usd_last_24_hours && currency.metrics.market_data.percent_change_usd_last_24_hours >= 0) ? 'green' : 'red'}
-        ]}>
-          {currency.metrics.market_data.percent_change_usd_last_24_hours && currency.metrics.market_data.percent_change_usd_last_24_hours.toFixed(2)}%
-        </Text>
+        <Text style={[styles.boldText]}>{`$${currency.price && currency.price.toFixed(0)}`}</Text>
+        <View style={styles.percent}>
+          {(currency.pctg && currency.pctg >= 0) ? <Icon name="arrow-up-right" size={17} color="green" /> : <Icon name="arrow-down-left" size={17} color= 'red' />}
+          <Text style={[styles.span, {color: (currency.pctg && currency.pctg >= 0) ? 'green' : 'red'}]}>
+            {currency.pctg && (currency.pctg >= 0) ? currency.pctg.toFixed(2) *1 : currency.pctg.toFixed(2) *-1}%
+          </Text>
+        </View>
       </View>
     </View>
   );
@@ -36,7 +38,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingVertical: 24,
-    borderBottomWidth: 0.6,
+    borderBottomWidth: 0.4,
     borderBottomColor: 'gray',
     alignItems: 'center'
   },
@@ -47,8 +49,8 @@ const styles = StyleSheet.create({
   icon: {
     height: 48,
     width: 48,
-    borderRadius: 20,
-    // backgroundColor: 'gray',
+    borderRadius: 24,
+    backgroundColor: 'gray',
     marginRight: 7
   },
   boldText: {
@@ -59,4 +61,8 @@ const styles = StyleSheet.create({
   span: {
     textAlign: 'right',
   },
+  percent: {
+    flexDirection: 'row',
+    alignItems: 'center'
+  }
 });

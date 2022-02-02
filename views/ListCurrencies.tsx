@@ -1,14 +1,13 @@
 import React, {useState, useEffect, FC} from 'react';
-import axios from 'axios';
+import { useSelector } from 'react-redux';
 import { StyleSheet, Text, TouchableOpacity, View, Image, ScrollView } from 'react-native';
 
-// import { useGetCurrencies } from '../customHooks/currenciesHooks';
 import CurrencyCard from '../components/CurrencyCard';
-import { Currency } from '../interfaces';
 
 const Home: FC = ({navigation}: any) => {
-  const [currenciesList, setCurrenciesList] = useState<Currency[]>([])
-
+  // const [userCurrenciesList, setUserCurrenciesList] = useState<Currency[]>([])
+  const userCurrenciesList = useSelector(state => state.currencies.appCurrenciesList)
+  
   return (
     <ScrollView contentContainerStyle={styles.mainContainer}>
       <View style={styles.headerContainer}>
@@ -16,11 +15,11 @@ const Home: FC = ({navigation}: any) => {
         <Image style={styles.userPhoto} source={{uri: 'https://i.imgur.com/kregEJT.png'}} />
       </View>
       <View style={{paddingHorizontal: 24}}>
-        {!currenciesList && <View style={styles.noCryptoContainer}>
+        {!userCurrenciesList && <View style={styles.noCryptoContainer}>
             <Text style={styles.noCryptoText}>You haven't added cryptocurrencies yet</Text>
           </View>
         }
-        {currenciesList && currenciesList.slice(0, 3).map(currency => <CurrencyCard key={currency.id} currency={currency} />)}
+        {userCurrenciesList && userCurrenciesList.slice(0, 3).map(currency => <CurrencyCard key={currency.symbol} currency={currency} />)}
         <View>
           <TouchableOpacity onPress={() => navigation.navigate('new-currency')}>
             <Text style={styles.button}>{`+ Add a Cryptocurrency`}</Text>
@@ -80,18 +79,3 @@ const styles = StyleSheet.create({
     marginTop: 50
   }
 });
-
-// const HOST = "https://data.messari.io/api"
-
-// useEffect(() => {
-//   axios.get(`${HOST}/v2/assets?fields=id,name,symbol,metrics/market_data/price_usd,metrics/market_data/percent_change_usd_last_24_hours`)
-//   .then((res) => {
-//     console.log('LIST CURRENCIES')
-//     setCurrenciesList(res.data.data)
-//   })
-//   .catch(error => {
-//     console.log(`No se pudo obtener el listado de cryptos porque ${error}`)
-//   })
-// }, [])
-
-// console.log('listado de' + currenciesList.length)

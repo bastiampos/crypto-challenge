@@ -1,10 +1,15 @@
 import React, {useState, FC} from 'react';
-// import { useSelector, useDispatch } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
+import currenciesActions from '../redux/actions/currenciesActions';
+
 const NewCurrency: FC = () => {
-  // const dispatch = useDispatch()
-  // const nombreDeVariable = useSelector(state => state.nombreDeReducerAsignadoEnMainReducer.propiedadDelReducer)
+  const dispatch = useDispatch()
+
+
+
+  const [inputValue, setInputValue] = useState('')
 
   return (
     <View style={styles.mainContainer}>
@@ -14,10 +19,12 @@ const NewCurrency: FC = () => {
           style={[styles.input, {borderColor: '#B7C0C6'}]}
           placeholder='Use a name or ticker symbol...'
           placeholderTextColor={'#B7C0C6'}
+          onChange={e => setInputValue(e.nativeEvent.text)}
+          value={inputValue}
           autoFocus={true}
         />
         <View style={{alignItems: 'flex-end'}}>
-          <TouchableOpacity style={styles.button}>
+          <TouchableOpacity style={styles.button} onPress={() => dispatch(currenciesActions.getCurrencyBySymbol(inputValue))}>
             <Text style={[styles.textButton, {color: '#385775'}]}>Add</Text>
           </TouchableOpacity>
         </View>
@@ -61,9 +68,3 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   }
 });
-
-
-
-// const [inputValue, setInputValue] = useState('')
-// onChange={e => setInputValue(e.nativeEvent.text)}
-// value={inputValue}
