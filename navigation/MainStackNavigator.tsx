@@ -12,8 +12,8 @@ export const MainStackNavigator = () => {
                 name='list-currencies' 
                 component={ListCurrencies} 
                 options= {{
-                    title: '',
-                    headerBackTitleVisible: false
+                    headerBackTitleVisible: false,
+                    headerShown: false
                 }}
             />
             <Stack.Screen 
