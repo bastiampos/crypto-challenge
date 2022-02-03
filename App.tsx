@@ -7,10 +7,7 @@ import mainReducer from './redux/reducers/mainReducer'
 import { NavigationContainer } from '@react-navigation/native';
 
 import {
-  SafeAreaView,
-  StatusBar,
   StyleSheet,
-  useColorScheme,
 } from 'react-native';
 import { MainStackNavigator } from './navigation/MainStackNavigator';
 

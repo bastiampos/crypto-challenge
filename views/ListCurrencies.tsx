@@ -1,13 +1,21 @@
 import React, {useState, useEffect, FC} from 'react';
+import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import { StyleSheet, Text, TouchableOpacity, View, Image, ScrollView } from 'react-native';
 
 import CurrencyCard from '../components/CurrencyCard';
 import { Currency } from '../interfaces';
+import currenciesActions from '../redux/actions/currenciesActions';
+import { MainState } from '../redux/reducers/mainReducer';
 
-const Home = ({navigation}: any) => {
+const Home: FC = ({navigation}: any) => {
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    dispatch(currenciesActions.getUserCurrenciesFromAsync())
+  }, [])
   
-  const userCurrenciesList = useSelector(state => state.currencies.userCurrenciesList)
+  const userCurrenciesList = useSelector((state: MainState) => state.currencies.userCurrenciesList)
   
   return (
     <ScrollView contentContainerStyle={styles.mainContainer}>
@@ -16,7 +24,7 @@ const Home = ({navigation}: any) => {
         <Image style={styles.userPhoto} source={{uri: 'https://i.imgur.com/kregEJT.png'}} />
       </View>
       <View style={{paddingHorizontal: 24}}>
-        {!userCurrenciesList && <View style={styles.noCryptoContainer}>
+        {(userCurrenciesList && userCurrenciesList.length === 0) && <View style={styles.noCryptoContainer}>
             <Text style={styles.noCryptoText}>You haven't added cryptocurrencies yet</Text>
           </View>
         }
