@@ -1,7 +1,8 @@
 import { StyleSheet, Text, View, Image } from 'react-native';
-import React, {FC} from 'react';
+import React, {FC, ReactElement, ReactNode} from 'react';
 
 import Icon from 'react-native-vector-icons/Feather'
+import { Currency } from '../interfaces';
 Icon.loadFont()
 
 const CurrencyCard = ({currency}: any) => {

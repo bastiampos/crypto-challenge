@@ -3,10 +3,11 @@ import { useSelector } from 'react-redux';
 import { StyleSheet, Text, TouchableOpacity, View, Image, ScrollView } from 'react-native';
 
 import CurrencyCard from '../components/CurrencyCard';
+import { Currency } from '../interfaces';
 
-const Home: FC = ({navigation}: any) => {
-  // const [userCurrenciesList, setUserCurrenciesList] = useState<Currency[]>([])
-  const userCurrenciesList = useSelector(state => state.currencies.appCurrenciesList)
+const Home = ({navigation}: any) => {
+  
+  const userCurrenciesList = useSelector(state => state.currencies.userCurrenciesList)
   
   return (
     <ScrollView contentContainerStyle={styles.mainContainer}>
@@ -19,7 +20,7 @@ const Home: FC = ({navigation}: any) => {
             <Text style={styles.noCryptoText}>You haven't added cryptocurrencies yet</Text>
           </View>
         }
-        {userCurrenciesList && userCurrenciesList.slice(0, 3).map(currency => <CurrencyCard key={currency.symbol} currency={currency} />)}
+        {userCurrenciesList && userCurrenciesList.map((currency: Currency) => <CurrencyCard key={currency.symbol} currency={currency} />)}
         <View>
           <TouchableOpacity onPress={() => navigation.navigate('new-currency')}>
             <Text style={styles.button}>{`+ Add a Cryptocurrency`}</Text>
