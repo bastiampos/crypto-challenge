@@ -13,8 +13,8 @@ const CurrencyCard: FC<Props> = ({currency}) => {
   const [isPositive, setIsPositive] = useState<Boolean>()
 
   useEffect(() => {
-    setIsPositive(currency.pctg >= 0 ? true : false)
-  })
+    setIsPositive(currency.pctg >= 0)
+  }, [])
 
   return (
     <View style={styles.mainContainer}>
@@ -28,10 +28,11 @@ const CurrencyCard: FC<Props> = ({currency}) => {
       <View>
         <Text style={styles.boldText}>{`$${currency.price.toFixed(2)}`}</Text>
         <View style={styles.percent}>
-          {currency.pctg >= 0 
-            ? <Icon name="arrow-up-right" size={17} color={colors.green} /> 
-            : <Icon name="arrow-down-left" size={17} color={colors.warning} />
-          }
+          <Icon 
+            name={isPositive ? "arrow-up-right" : "arrow-down-left"} 
+            size={17} 
+            color={isPositive ? colors.green : colors.warning} 
+          />
           <Text style={[styles.span, {color: isPositive ? colors.green : colors.warning}]}>
             {isPositive ? currency.pctg.toFixed(2) : currency.pctg.toFixed(2) *-1}%
           </Text>
