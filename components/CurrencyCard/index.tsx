@@ -4,6 +4,7 @@ import Icon from 'react-native-vector-icons/Feather'
 import styles from './styles';
 import colors from '../../assets/stylesRoot/colors';
 Icon.loadFont()
+
 interface Props {
   currency: any
 }
@@ -25,7 +26,7 @@ const CurrencyCard: FC<Props> = ({currency}) => {
         </View>
       </View>
       <View>
-        <Text style={styles.boldText}>{`$${currency.price.toFixed(0)}`}</Text>
+        <Text style={styles.boldText}>{`$${currency.price.toFixed(2)}`}</Text>
         <View style={styles.percent}>
           {currency.pctg >= 0 
             ? <Icon name="arrow-up-right" size={17} color={colors.green} /> 
