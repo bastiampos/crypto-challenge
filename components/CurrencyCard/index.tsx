@@ -4,13 +4,11 @@ import Icon from 'react-native-vector-icons/Feather'
 import styles from './styles';
 import colors from '../../assets/stylesRoot/colors';
 Icon.loadFont()
-
 interface Props {
   currency: any
 }
 
 const CurrencyCard: FC<Props> = ({currency}) => {
-
   const [isPositive, setIsPositive] = useState<Boolean>()
 
   useEffect(() => {

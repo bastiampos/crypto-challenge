@@ -1,6 +1,5 @@
 import React, {useEffect, FC} from 'react';
-import { useDispatch } from 'react-redux';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Text, TouchableOpacity, View, Image, FlatList, ListRenderItem} from 'react-native';
 import {getUserCurrenciesFromAsync} from '../../redux/actions/currenciesActions';
 import { IState } from '../../redux/reducers/mainReducer';

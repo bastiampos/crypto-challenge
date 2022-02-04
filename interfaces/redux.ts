@@ -1,4 +1,5 @@
 import { ICurrency } from './currency';
+
 export interface IGetCurrenciesAction {
   type: string;
   payload: ICurrency[];
