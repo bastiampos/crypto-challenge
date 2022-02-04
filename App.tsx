@@ -1,31 +1,22 @@
 import React from 'react';
-import { applyMiddleware, createStore } from 'redux'
 import { Provider } from 'react-redux'
 import thunk from 'redux-thunk'
-
+import { applyMiddleware, createStore } from 'redux'
 import mainReducer from './redux/reducers/mainReducer'
 import { NavigationContainer } from '@react-navigation/native';
+import MainStackNavigator from './navigation/MainStackNavigator';
+import {FC} from 'react';
 
-import {
-  StyleSheet,
-} from 'react-native';
-import { MainStackNavigator } from './navigation/MainStackNavigator';
+const store = createStore(mainReducer, applyMiddleware(thunk))
 
-const globalStore = createStore(mainReducer, applyMiddleware(thunk))
-
-const App = () => {
-
+const App: FC = (): JSX.Element => {
   return (
-    <Provider store={globalStore}>
+    <Provider store={store}>
       <NavigationContainer>
         <MainStackNavigator />
       </NavigationContainer>
     </Provider>
-  );
-};
-
-const styles = StyleSheet.create({
-
-});
+  )
+}
 
 export default App;

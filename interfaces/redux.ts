@@ -1,10 +1,8 @@
-import { Currency } from './currency';
-
-export interface ThunkAction {
-  type: string,
-  payload?: any
+import { ICurrency } from './currency';
+export interface IGetCurrenciesAction {
+  type: string;
+  payload: ICurrency[];
 }
-
-export interface CurrenciesState {
-  userCurrenciesList: Currency[]
+export type ICurrenciesState = {
+  userCurrenciesList: ICurrency[];
 }

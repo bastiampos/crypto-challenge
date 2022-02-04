@@ -5,4 +5,4 @@ const mainReducer = combineReducers({currencies: currenciesReducer})
  
 export default mainReducer
 
-export type MainState = ReturnType<typeof mainReducer>
+export type IState = ReturnType<typeof mainReducer>

@@ -1,6 +1,7 @@
-export interface Currency {
+export interface ICurrency {
   name:    string;
   symbol:  string;
   price: number;
-  pctg: number
+  pctg: number,
+  src: string
 }

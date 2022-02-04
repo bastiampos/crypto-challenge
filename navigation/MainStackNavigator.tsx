@@ -1,20 +1,24 @@
 import React from 'react';
-import {createNativeStackNavigator} from '@react-navigation/native-stack'
-import ListCurrencies from '../views/ListCurrencies';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import CurrenciesList from '../views/CurrenciesList';
+import { Routes } from './routes';
 
-const Stack = createNativeStackNavigator()
+const Stack = createNativeStackNavigator();
 
-export const MainStackNavigator = () => {
+const MainStackNavigator = (): JSX.Element => {
     return (
-        <Stack.Navigator>
+        <Stack.Navigator screenOptions= {{
+            headerShown: false
+        }}>
             <Stack.Screen 
-                name='list-currencies' 
-                component={ListCurrencies} 
+                name={Routes.CURRENCIES_LIST}
+                component={CurrenciesList}
                 options= {{
                     headerBackTitleVisible: false,
-                    headerShown: false
                 }}
             />
         </Stack.Navigator>
     )
-}
+};
+
+export default MainStackNavigator
