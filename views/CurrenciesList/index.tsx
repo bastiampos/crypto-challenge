@@ -15,8 +15,8 @@ const Home: FC<Props> = ({navigation}) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getUserCurrenciesFromAsync());
-  }, []);
+    dispatch(getUserCurrenciesFromAsync())
+  }, [])
   
   const userCurrenciesList = useSelector( (state: IState) => state.currencies.userCurrenciesList );
 
@@ -37,9 +37,10 @@ const Home: FC<Props> = ({navigation}) => {
           data={userCurrenciesList}
           keyExtractor={(currency) => currency.symbol}
           renderItem={renderCurrencies}
+          // scrollEnabled={false}
         />
         <View>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate('add-currency')}>
             <Text style={styles.button}>+ Add a Cryptocurrency</Text>
           </TouchableOpacity>
         </View>

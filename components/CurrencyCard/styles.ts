@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
     height: 48,
     width: 48,
     borderRadius: 24,
-    backgroundColor: colors.primaryGray,
+    // backgroundColor: colors.primaryGray,
     marginRight: 7
   },
   boldText: {
