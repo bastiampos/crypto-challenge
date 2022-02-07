@@ -3,9 +3,19 @@ import colors from "../../assets/stylesRoot/colors";
 
 const styles = StyleSheet.create({
   mainContainer: {
-    paddingHorizontal: 24,
     flex: 1,
-    paddingTop: '50%'
+    marginHorizontal: 24,
+  },
+  header: {
+    marginTop: '10%',
+    marginBottom: '60%'
+  },
+  backButton: {
+
+  },
+  textBackButton: {
+    color: colors.primaryBlue,
+    fontSize: 16
   },
   title: {
     fontSize: 24,
@@ -20,6 +30,10 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginBottom: 16,
     fontSize: 16
+  },
+  error: {
+    color: colors.warning,
+    marginBottom: 10
   },
   buttonContainer: {
     alignItems: 'flex-end'

@@ -1,18 +1,17 @@
-import React, {useEffect, FC} from 'react';
+import React, {useEffect} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Text, TouchableOpacity, View, Image, FlatList, ListRenderItem} from 'react-native';
 import {getUserCurrenciesFromAsync} from '../../redux/actions/currenciesActions';
 import { IState } from '../../redux/reducers/mainReducer';
 import CurrencyCard from '../../components/CurrencyCard';
+import { useNavigation } from '@react-navigation/native';
 import styles from './styles';
 import { ICurrency } from '../../interfaces';
+import { Routes } from '../../navigation/routes';
 
-interface Props {
-  navigation: any
-}
-
-const Home: FC<Props> = ({navigation}) => {
+const Home = (): JSX.Element => {
   const dispatch = useDispatch();
+  const {navigate}: any = useNavigation();
 
   useEffect(() => {
     dispatch(getUserCurrenciesFromAsync())
@@ -21,6 +20,8 @@ const Home: FC<Props> = ({navigation}) => {
   const userCurrenciesList = useSelector( (state: IState) => state.currencies.userCurrenciesList );
 
   const renderCurrencies: ListRenderItem<ICurrency> = ({item}) => <CurrencyCard key={item.symbol} currency={item} />
+
+  const goToAddCurrency = () => navigate(Routes.ADD_CURRENCY)
   
   return (
     <View style={styles.mainContainer}>
@@ -37,10 +38,9 @@ const Home: FC<Props> = ({navigation}) => {
           data={userCurrenciesList}
           keyExtractor={(currency) => currency.symbol}
           renderItem={renderCurrencies}
-          // scrollEnabled={false}
         />
         <View>
-          <TouchableOpacity onPress={() => navigation.navigate('add-currency')}>
+          <TouchableOpacity onPress={goToAddCurrency}>
             <Text style={styles.button}>+ Add a Cryptocurrency</Text>
           </TouchableOpacity>
         </View>

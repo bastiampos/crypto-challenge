@@ -8,20 +8,15 @@ const Stack = createNativeStackNavigator();
 
 const MainStackNavigator = (): JSX.Element => (
     <Stack.Navigator screenOptions= {{
-        // headerShown: false
+        headerShown: false
     }}>
         <Stack.Screen 
             name={Routes.CURRENCIES_LIST}
             component={CurrenciesList}
-            options= {{
-                headerBackTitleVisible: false,
-                title: 'List',
-                headerShown: false
-            }}
         />
         <Stack.Screen 
             name={Routes.ADD_CURRENCY}
-            component={AddCurrency} 
+            component={AddCurrency}
         />
     </Stack.Navigator>
 )
