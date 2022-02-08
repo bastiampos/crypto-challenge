@@ -1,27 +1,38 @@
-import { IGetCurrenciesAction, ICurrenciesState } from "../../interfaces"
-import { GET_USER_CURRENCIES_FROM_ASYNC } from '../actionsTypes';
+import { IGetCurrenciesAction, ICurrenciesState } from "../../types"
+import { ADD_NEW_CRYPTOCURRENCY, GET_USER_CURRENCIES_FROM_ASYNC } from '../actionsTypes';
 
 const initialState: ICurrenciesState = { 
-  userCurrenciesList: [
+  allCurrencies: [
     {
       name: 'Bitcoin',
       symbol: 'BTC',
       price: 7215.68,
-      pctg: 1.82
+      pctg: 1.82,
+      src: 'https://i.imgur.com/uiou8xz.png'
     },
     {
       name: 'Ethereum',
       symbol: 'ETH',
       price: 146.83,
-      pctg: 1.46
+      pctg: 1.46,
+      src: 'https://i.imgur.com/Ph5Ebne.png'
     },
     {
       name: 'XRP',
       symbol: 'XRP',
       price: 0.220568,
-      pctg: -2.47
+      pctg: -2.47,
+      src: 'https://i.imgur.com/cDrojKx.png'
     },
-  ]
+    {
+      name: 'Litecoin',
+      symbol: 'LTC',
+      price: 45.94,
+      pctg: 1.47,
+      src: 'https://i.imgur.com/NJmNFlP.png'
+    },
+  ],
+  userCurrencyList: []
 }
 
 const currenciesReducer = ( state: ICurrenciesState = initialState, action: IGetCurrenciesAction): ICurrenciesState => {
@@ -29,7 +40,12 @@ const currenciesReducer = ( state: ICurrenciesState = initialState, action: IGet
     case GET_USER_CURRENCIES_FROM_ASYNC: 
       return {
         ...state,
-        userCurrenciesList: action.payload
+        userCurrencyList: action.payload
+      }
+    case ADD_NEW_CRYPTOCURRENCY:
+      return {
+        ...state,
+        userCurrencyList: action.payload
       }
     default:
       return state

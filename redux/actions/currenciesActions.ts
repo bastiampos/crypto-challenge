@@ -1,20 +1,50 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Dispatch } from 'redux';
-import { IGetCurrenciesAction } from '../../interfaces';
-import { GET_USER_CURRENCIES_FROM_ASYNC } from '../actionsTypes';
+import { ICurrency, IGetCurrenciesAction } from '../../types';
+import { ADD_NEW_CRYPTOCURRENCY, GET_USER_CURRENCIES_FROM_ASYNC } from '../actionsTypes';
+import { IState } from '../reducers/mainReducer';
+import { AsyncKeys } from '../../types';
 
-export const getUserCurrenciesFromAsync = () => {
-  return async (dispatch: Dispatch<IGetCurrenciesAction>) => {
+export const getUserCurrenciesFromAsync = () => async (dispatch: Dispatch<IGetCurrenciesAction>) => {
+  try {
+    const userCurrencyList = await AsyncStorage.getItem(AsyncKeys.userCurrencyList)
+    
+    if (userCurrencyList) {
+      dispatch({
+        type: GET_USER_CURRENCIES_FROM_ASYNC, 
+        payload: JSON.parse(userCurrencyList)
+      })
+    }
+  } catch(e) {
+    console.log(e)
+  }
+}
+
+export const addCurrencyBySymbol = (valueSearched: string) => async (dispatch: Dispatch, getState: () => IState) => {
+  const {allCurrencies, userCurrencyList} = getState().currencies
+
+  const newCrypto: ICurrency | undefined  = allCurrencies.find( ({symbol, name}) => {
+    let isAdded: ICurrency | undefined  = userCurrencyList.find( ({symbol, name}) => (
+      symbol.toLowerCase() === valueSearched.toLowerCase() ||  name.toLowerCase() === valueSearched.toLowerCase()
+    ))
+
+    return (symbol.toLowerCase() === valueSearched.toLowerCase() ||  name.toLowerCase() === valueSearched.toLowerCase()) && !isAdded
+  })
+
+  if (newCrypto) {
+    const updatedUserCurrencies: ICurrency[] = [...userCurrencyList, newCrypto]
+
+    dispatch({type: ADD_NEW_CRYPTOCURRENCY, payload: updatedUserCurrencies})
+
     try {
-      const userCurrenciesList = await AsyncStorage.getItem('@userCurrenciesList')
-      if (userCurrenciesList != null ) {
-        dispatch({
-          type: GET_USER_CURRENCIES_FROM_ASYNC, 
-          payload: JSON.parse(userCurrenciesList)
-        })
-      }
-    } catch(e) {
+      const updatedList: string = JSON.stringify(updatedUserCurrencies)
+      await AsyncStorage.setItem(AsyncKeys.userCurrencyList, updatedList)
+    } catch (e) {
       console.log(e)
     }
-  }
+
+    return true
+  } 
+  
+  return false
 }

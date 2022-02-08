@@ -31,15 +31,13 @@ const styles = StyleSheet.create({
   },
   noCryptoContainer: {
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'center', 
     paddingVertical: 10,
     borderRadius: 4,
-    borderColor: colors.secondGray,
-    backgroundColor: colors.primaryGray,
-    borderWidth: 1
+    backgroundColor: colors.lightGray,
   },
   noCryptoText: {
-    color: colors.thirdGray
+    color: colors.darkGray,
   },
   currenciesContainer: {
     paddingHorizontal: 24

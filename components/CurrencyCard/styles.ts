@@ -10,7 +10,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingVertical: 24,
     borderBottomWidth: 0.4,
-    borderBottomColor: colors.primaryGray,
+    borderBottomColor: colors.lightGray,
     alignItems: 'center'
   },
   leftContainer: {
@@ -21,7 +21,6 @@ const styles = StyleSheet.create({
     height: 48,
     width: 48,
     borderRadius: 24,
-    backgroundColor: colors.primaryGray,
     marginRight: 7
   },
   boldText: {
@@ -29,8 +28,8 @@ const styles = StyleSheet.create({
     fontSize: 16,
     textAlign: 'right'
   },
-  span: {
-    textAlign: 'right',
+  rightContainer: {
+    alignItems: 'flex-end'
   },
   percent: {
     flexDirection: 'row',

@@ -10,10 +10,13 @@ interface Props {
 }
 
 const CurrencyCard: FC<Props> = ({currency}) => {
-  const [isPositive, setIsPositive] = useState<Boolean>()
+  const [isPositive, setIsPositive] = useState(false)
+  const [price, setPrice] = useState('')
 
   useEffect(() => {
+    const priceFormat = new Intl.NumberFormat('en-US')
     setIsPositive(currency.pctg >= 0)
+    setPrice(priceFormat.format(currency.price.toFixed(2)))
   }, [])
 
   return (
@@ -25,15 +28,15 @@ const CurrencyCard: FC<Props> = ({currency}) => {
           <Text>{currency.symbol}</Text>
         </View>
       </View>
-      <View>
-        <Text style={styles.boldText}>{`$${currency.price.toFixed(2)}`}</Text>
+      <View style={styles.rightContainer}>
+        <Text style={styles.boldText}>{`$${price}`}</Text>
         <View style={styles.percent}>
           <Icon 
             name={isPositive ? "arrow-up-right" : "arrow-down-left"} 
             size={17} 
-            color={isPositive ? colors.green : colors.warning} 
+            color={isPositive ? colors.darkGreen : colors.warning} 
           />
-          <Text style={[styles.span, {color: isPositive ? colors.green : colors.warning}]}>
+          <Text style={{color: isPositive ? colors.darkGreen : colors.warning}}>
             {isPositive ? currency.pctg.toFixed(2) : currency.pctg.toFixed(2) *-1}%
           </Text>
         </View>

@@ -5,5 +5,10 @@ export interface IGetCurrenciesAction {
   payload: ICurrency[];
 }
 export type ICurrenciesState = {
-  userCurrenciesList: ICurrency[];
+  allCurrencies: ICurrency[]
+  userCurrencyList: ICurrency[];
+}
+
+export enum AsyncKeys {
+  userCurrencyList = '@userCurrencyList'
 }
