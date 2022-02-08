@@ -14,8 +14,8 @@ const CurrencyCard: FC<Props> = ({currency}) => {
   const [price, setPrice] = useState('')
 
   useEffect(() => {
-    setIsPositive(currency.pctg >= 0)
     const priceFormat = new Intl.NumberFormat('en-US')
+    setIsPositive(currency.pctg >= 0)
     setPrice(priceFormat.format(currency.price.toFixed(2)))
   }, [])
 

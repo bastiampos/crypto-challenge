@@ -39,7 +39,7 @@ const Home = (): JSX.Element => {
           renderItem={renderCurrencies}
         />
         <View>
-          <TouchableOpacity onPress={navigate.bind(null, ADD_CURRENCY)}>
+          <TouchableOpacity onPress={navigate.bind(null, ADD_CURRENCY, null)}>
             <Text style={styles.button}>+ Add a Cryptocurrency</Text>
           </TouchableOpacity>
         </View>
