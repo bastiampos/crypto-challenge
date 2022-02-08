@@ -20,22 +20,18 @@ export const getUserCurrenciesFromAsync = () => async (dispatch: Dispatch<IGetCu
   }
 }
 
-// 1. Buscar si el usuario ya lo ha agregado a su lista
-// 2. Buscar si existe en la lista de cryptos disponibles
-// 3. Agregarlo a la lista si no lo ha agregado y sí existe en la lista
-
 export const addCurrencyBySymbol = (valueSearched: string) => async (dispatch: Dispatch, getState: () => IState) => {
   const {allCurrencies, userCurrencyList} = getState().currencies
 
   const newCrypto: ICurrency | undefined  = allCurrencies.find( ({symbol, name}) => {
-    return symbol.toLowerCase() === valueSearched.toLowerCase() ||  name.toLowerCase() === valueSearched.toLowerCase()
+    let isAdded: ICurrency | undefined  = userCurrencyList.find( ({symbol, name}) => (
+      symbol.toLowerCase() === valueSearched.toLowerCase() ||  name.toLowerCase() === valueSearched.toLowerCase()
+    ))
+
+    return (symbol.toLowerCase() === valueSearched.toLowerCase() ||  name.toLowerCase() === valueSearched.toLowerCase()) && !isAdded
   })
 
-  const isAdded: ICurrency | undefined  = userCurrencyList.find(({symbol}) => {
-    return symbol.toLowerCase()  === newCrypto?.symbol
-  })
-
-  if (newCrypto && !isAdded) {
+  if (newCrypto) {
     const updatedUserCurrencies: ICurrency[] = [...userCurrencyList, newCrypto]
 
     dispatch({type: ADD_NEW_CRYPTOCURRENCY, payload: updatedUserCurrencies})
