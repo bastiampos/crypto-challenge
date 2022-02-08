@@ -18,7 +18,7 @@ const Home = (): JSX.Element => {
     dispatch(getUserCurrenciesFromAsync())
   }, [])
   
-  const userCurrenciesList = useSelector( (state: IState) => state.currencies.userCurrenciesList );
+  const userCurrencyList = useSelector( (state: IState) => state.currencies.userCurrencyList );
 
   const renderCurrencies: ListRenderItem<ICurrency> = ({item}) => <CurrencyCard key={item.symbol} currency={item} />
   
@@ -29,12 +29,12 @@ const Home = (): JSX.Element => {
         <Image style={styles.userPhoto} source={{uri: 'https://i.imgur.com/kregEJT.png'}} />
       </View>
       <View style={styles.currenciesContainer}>
-        {userCurrenciesList?.length === 0 && <View style={styles.noCryptoContainer}>
+        {userCurrencyList?.length === 0 && <View style={styles.noCryptoContainer}>
             <Text style={styles.noCryptoText}>You haven't added cryptocurrencies yet</Text>
           </View>
         }
         <FlatList
-          data={userCurrenciesList}
+          data={userCurrencyList}
           keyExtractor={(currency) => currency.symbol}
           renderItem={renderCurrencies}
         />

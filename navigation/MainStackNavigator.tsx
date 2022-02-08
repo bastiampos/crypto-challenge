@@ -11,7 +11,7 @@ const MainStackNavigator = (): JSX.Element => (
         headerShown: false
     }}>
         <Stack.Screen 
-            name={Routes.CURRENCIES_LIST}
+            name={Routes.CURRENCY_LIST}
             component={CurrenciesList}
         />
         <Stack.Screen 

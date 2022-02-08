@@ -32,7 +32,7 @@ const initialState: ICurrenciesState = {
       src: 'https://i.imgur.com/NJmNFlP.png'
     },
   ],
-  userCurrenciesList: []
+  userCurrencyList: []
 }
 
 const currenciesReducer = ( state: ICurrenciesState = initialState, action: IGetCurrenciesAction): ICurrenciesState => {
@@ -40,12 +40,12 @@ const currenciesReducer = ( state: ICurrenciesState = initialState, action: IGet
     case GET_USER_CURRENCIES_FROM_ASYNC: 
       return {
         ...state,
-        userCurrenciesList: action.payload
+        userCurrencyList: action.payload
       }
     case ADD_NEW_CRYPTOCURRENCY:
       return {
         ...state,
-        userCurrenciesList: action.payload
+        userCurrencyList: action.payload
       }
     default:
       return state

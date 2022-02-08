@@ -7,12 +7,12 @@ import { AsyncKeys } from '../../types';
 
 export const getUserCurrenciesFromAsync = () => async (dispatch: Dispatch<IGetCurrenciesAction>) => {
   try {
-    const userCurrenciesList = await AsyncStorage.getItem(AsyncKeys.userCurrencyList)
+    const userCurrencyList = await AsyncStorage.getItem(AsyncKeys.userCurrencyList)
     
-    if (userCurrenciesList) {
+    if (userCurrencyList) {
       dispatch({
         type: GET_USER_CURRENCIES_FROM_ASYNC, 
-        payload: JSON.parse(userCurrenciesList)
+        payload: JSON.parse(userCurrencyList)
       })
     }
   } catch(e) {
@@ -25,18 +25,18 @@ export const getUserCurrenciesFromAsync = () => async (dispatch: Dispatch<IGetCu
 // 3. Agregarlo a la lista si no lo ha agregado y sí existe en la lista
 
 export const addCurrencyBySymbol = (valueSearched: string) => async (dispatch: Dispatch, getState: () => IState) => {
-  const {allCurrencies, userCurrenciesList} = getState().currencies
+  const {allCurrencies, userCurrencyList} = getState().currencies
 
-  const newCrypto = allCurrencies.find( (currency: ICurrency) => {
-    return ( currency.symbol.toLowerCase() || currency.name.toLowerCase()) === valueSearched.toLowerCase()
+  const newCrypto: ICurrency | undefined  = allCurrencies.find( ({symbol, name}) => {
+    return symbol.toLowerCase() === valueSearched.toLowerCase() ||  name.toLowerCase() === valueSearched.toLowerCase()
   })
 
-  const isAdded = userCurrenciesList.find((currency: ICurrency) => {
-    return ( currency.symbol.toLowerCase() || currency.name.toLowerCase()) === valueSearched.toLowerCase()
+  const isAdded: ICurrency | undefined  = userCurrencyList.find(({symbol}) => {
+    return symbol.toLowerCase()  === newCrypto?.symbol
   })
 
   if (newCrypto && !isAdded) {
-    const updatedUserCurrencies: ICurrency[] = [...userCurrenciesList, newCrypto]
+    const updatedUserCurrencies: ICurrency[] = [...userCurrencyList, newCrypto]
 
     dispatch({type: ADD_NEW_CRYPTOCURRENCY, payload: updatedUserCurrencies})
 
@@ -47,10 +47,8 @@ export const addCurrencyBySymbol = (valueSearched: string) => async (dispatch: D
       console.log(e)
     }
 
-    return 'You have added a new cryptocurrency'
+    return true
   } 
   
-  return `${valueSearched} has been added or doesn't exist`
+  return false
 }
-
-// : ICurrency | undefined 

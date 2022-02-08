@@ -3,7 +3,6 @@ import React, {useState, useEffect, FC} from 'react';
 import { Text, TextInput, TouchableOpacity, View, SafeAreaView } from 'react-native';
 import {addCurrencyBySymbol} from '../../redux/actions/currenciesActions';
 import colors from '../../assets/stylesRoot/colors';
-import { Routes } from '../../navigation/routes';
 import styles from './styles';
 
 interface IAddCurrencyProps {
@@ -29,8 +28,8 @@ const AddCurrency: FC<IAddCurrencyProps> = ({navigation}) => {
         setError(`${inputValue} has been added or doesn't exist`)
         setInputValue('')
       } else {
-        navigation.navigate(Routes.CURRENCIES_LIST)
         setError('')
+        navigation.goBack()
       }
     }
   }
