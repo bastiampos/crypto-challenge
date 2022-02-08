@@ -10,9 +10,6 @@ const styles = StyleSheet.create({
     marginTop: '10%',
     marginBottom: '60%'
   },
-  backButton: {
-
-  },
   textBackButton: {
     color: colors.primaryBlue,
     fontSize: 16
@@ -31,7 +28,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     fontSize: 16
   },
-  error: {
+  alert: {
     color: colors.warning,
     marginBottom: 10
   },

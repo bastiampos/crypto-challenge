@@ -25,15 +25,15 @@ const CurrencyCard: FC<Props> = ({currency}) => {
           <Text>{currency.symbol}</Text>
         </View>
       </View>
-      <View>
+      <View style={styles.rightContainer}>
         <Text style={styles.boldText}>{`$${currency.price.toFixed(2)}`}</Text>
         <View style={styles.percent}>
           <Icon 
             name={isPositive ? "arrow-up-right" : "arrow-down-left"} 
             size={17} 
-            color={isPositive ? colors.green : colors.warning} 
+            color={isPositive ? colors.darkGreen : colors.warning} 
           />
-          <Text style={[styles.span, {color: isPositive ? colors.green : colors.warning}]}>
+          <Text style={{color: isPositive ? colors.darkGreen : colors.warning}}>
             {isPositive ? currency.pctg.toFixed(2) : currency.pctg.toFixed(2) *-1}%
           </Text>
         </View>

@@ -3,23 +3,20 @@ import React, {useState, useEffect, FC} from 'react';
 import { Text, TextInput, TouchableOpacity, View, SafeAreaView } from 'react-native';
 import {addCurrencyBySymbol} from '../../redux/actions/currenciesActions';
 import colors from '../../assets/stylesRoot/colors';
-import { useNavigation } from '@react-navigation/native';
 import { Routes } from '../../navigation/routes';
 import styles from './styles';
 
-const AddCurrency= (): JSX.Element => {
+interface IAddCurrencyProps {
+  navigation: any
+}
+
+const AddCurrency: FC<IAddCurrencyProps> = ({navigation}) => {
   const dispatch = useDispatch()
-  const navigation: any = useNavigation();
-  const routes = useNavigation().getState()?.routes
-  const prevRoute = routes[routes.length - 2]
 
-  const [inputValue, setInputValue] = useState<string>('')
-  const [isFocused, setIsFocused] = useState<boolean>(false)
-  const [isButtonActive, setIsButtonActive] = useState<boolean>(false)
-  const [error, setError ] = useState<string>('')
-
-  const handleFocus = () => setIsFocused(true) 
-  const handleBlur = () => setIsFocused(false) 
+  const [inputValue, setInputValue] = useState('')
+  const [isFocused, setIsFocused] = useState(false)
+  const [isButtonActive, setIsButtonActive] = useState(false)
+  const [error, setError ] = useState<any>('')
 
   useEffect(() => {
     setIsButtonActive(inputValue.length > 2)
@@ -27,9 +24,9 @@ const AddCurrency= (): JSX.Element => {
 
   const addCurrency = async () => {
     if (isButtonActive) {
-      const res = await dispatch(addCurrencyBySymbol(inputValue))
-      if(!res) {
-        setError(`Ya has agregado ${inputValue} o no existe`)
+      const response = await dispatch(addCurrencyBySymbol(inputValue))
+      if(!response) {
+        setError(`${inputValue} has been added or doesn't exist`)
         setInputValue('')
       } else {
         navigation.navigate(Routes.CURRENCIES_LIST)
@@ -38,13 +35,11 @@ const AddCurrency= (): JSX.Element => {
     }
   }
 
-  const goBack = () => navigation.goBack()
-
   return (
     <SafeAreaView style={styles.mainContainer}>
       <View style={styles.header}>
-          <TouchableOpacity style={styles.backButton} onPress={goBack}>
-            <Text style={styles.textBackButton}>{`< Back to ${prevRoute.name}`}</Text>
+          <TouchableOpacity onPress={navigation.goBack.bind(null)}>
+            <Text style={styles.textBackButton}>&#60; Back to list</Text>
           </TouchableOpacity>
       </View>
       <View>
@@ -53,12 +48,12 @@ const AddCurrency= (): JSX.Element => {
           style={[styles.input, {borderColor: isFocused ? colors.primaryYellow : colors.fourthGray}]}
           placeholder='Use a name or ticker symbol...'
           placeholderTextColor={colors.fourthGray} 
-          onChange={e => setInputValue(e.nativeEvent.text)}
+          onChange={ ({nativeEvent: {text}}) => setInputValue(text)}
           value={inputValue}
-          onFocus={handleFocus}
-          onBlur={handleBlur}
+          onFocus={setIsFocused.bind(null, true) }
+          onBlur={setIsFocused.bind(null, false) }
         />
-        <Text style={styles.error} >{error && error}</Text>
+        <Text style={styles.alert} >{error && error}</Text>
         <TouchableOpacity style={styles.buttonContainer} disabled={!isButtonActive} onPress={addCurrency}>
           <View style={styles.button}>
             <Text style={[styles.textButton, {opacity: isButtonActive ? 1 : 0.2}]}>Add</Text>

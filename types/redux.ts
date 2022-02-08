@@ -8,3 +8,7 @@ export type ICurrenciesState = {
   allCurrencies: ICurrency[]
   userCurrenciesList: ICurrency[];
 }
+
+export enum AsyncKeys {
+  userCurrencyList = '@userCurrencyList'
+}

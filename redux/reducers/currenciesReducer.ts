@@ -1,4 +1,4 @@
-import { IGetCurrenciesAction, ICurrenciesState } from "../../interfaces"
+import { IGetCurrenciesAction, ICurrenciesState } from "../../types"
 import { ADD_NEW_CRYPTOCURRENCY, GET_USER_CURRENCIES_FROM_ASYNC } from '../actionsTypes';
 
 const initialState: ICurrenciesState = { 

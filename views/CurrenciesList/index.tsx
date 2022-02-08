@@ -6,12 +6,13 @@ import { IState } from '../../redux/reducers/mainReducer';
 import CurrencyCard from '../../components/CurrencyCard';
 import { useNavigation } from '@react-navigation/native';
 import styles from './styles';
-import { ICurrency } from '../../interfaces';
+import { ICurrency } from '../../types';
 import { Routes } from '../../navigation/routes';
 
 const Home = (): JSX.Element => {
   const dispatch = useDispatch();
   const {navigate}: any = useNavigation();
+  const {ADD_CURRENCY} = Routes
 
   useEffect(() => {
     dispatch(getUserCurrenciesFromAsync())
@@ -20,8 +21,6 @@ const Home = (): JSX.Element => {
   const userCurrenciesList = useSelector( (state: IState) => state.currencies.userCurrenciesList );
 
   const renderCurrencies: ListRenderItem<ICurrency> = ({item}) => <CurrencyCard key={item.symbol} currency={item} />
-
-  const goToAddCurrency = () => navigate(Routes.ADD_CURRENCY)
   
   return (
     <View style={styles.mainContainer}>
@@ -40,7 +39,7 @@ const Home = (): JSX.Element => {
           renderItem={renderCurrencies}
         />
         <View>
-          <TouchableOpacity onPress={goToAddCurrency}>
+          <TouchableOpacity onPress={navigate.bind(null, ADD_CURRENCY)}>
             <Text style={styles.button}>+ Add a Cryptocurrency</Text>
           </TouchableOpacity>
         </View>
