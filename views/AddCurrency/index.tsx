@@ -15,7 +15,7 @@ const AddCurrency: FC<IAddCurrencyProps> = ({navigation}) => {
   const [inputValue, setInputValue] = useState('')
   const [isFocused, setIsFocused] = useState(false)
   const [isButtonActive, setIsButtonActive] = useState(false)
-  const [error, setError ] = useState<any>('')
+  const [error, setError ] = useState('')
 
   useEffect(() => {
     setIsButtonActive(inputValue.length > 2)
@@ -37,7 +37,7 @@ const AddCurrency: FC<IAddCurrencyProps> = ({navigation}) => {
   return (
     <SafeAreaView style={styles.mainContainer}>
       <View style={styles.header}>
-          <TouchableOpacity onPress={navigation.goBack.bind(null)}>
+          <TouchableOpacity onPress={navigation.goBack}>
             <Text style={styles.textBackButton}>&#60; Back to list</Text>
           </TouchableOpacity>
       </View>

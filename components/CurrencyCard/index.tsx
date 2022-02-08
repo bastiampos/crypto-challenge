@@ -10,12 +10,12 @@ interface Props {
 }
 
 const CurrencyCard: FC<Props> = ({currency}) => {
-  const [isPositive, setIsPositive] = useState<Boolean>()
-  const [price, setPrice] = useState<string>()
+  const [isPositive, setIsPositive] = useState(false)
+  const [price, setPrice] = useState('')
 
   useEffect(() => {
     setIsPositive(currency.pctg >= 0)
-    let priceFormat = new Intl.NumberFormat('en-US')
+    const priceFormat = new Intl.NumberFormat('en-US')
     setPrice(priceFormat.format(currency.price.toFixed(2)))
   }, [])
 
