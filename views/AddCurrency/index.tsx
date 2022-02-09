@@ -1,8 +1,7 @@
-import { useDispatch } from 'react-redux'
-import React, {useState, useEffect, FC} from 'react';
+import React, {FC} from 'react';
 import { Text, TextInput, TouchableOpacity, View, SafeAreaView } from 'react-native';
-import {addCurrencyBySymbol} from '../../redux/actions/currenciesActions';
 import colors from '../../assets/stylesRoot/colors';
+import { useAddNewCurrency } from '../../hooks/currenciesHooks';
 import styles from './styles';
 
 interface IAddCurrencyProps {
@@ -10,30 +9,9 @@ interface IAddCurrencyProps {
 }
 
 const AddCurrency: FC<IAddCurrencyProps> = ({navigation}) => {
-  const dispatch = useDispatch()
 
-  const [inputValue, setInputValue] = useState('')
-  const [isFocused, setIsFocused] = useState(false)
-  const [isButtonActive, setIsButtonActive] = useState(false)
-  const [error, setError ] = useState('')
-
-  useEffect(() => {
-    setIsButtonActive(inputValue.length > 2)
-  }, [inputValue])
-
-  const addCurrency = async () => {
-    if (isButtonActive) {
-      const response = await dispatch(addCurrencyBySymbol(inputValue))
-      if(!response) {
-        setError(`${inputValue} has been added or doesn't exist`)
-        setInputValue('')
-      } else {
-        setError('')
-        navigation.goBack()
-      }
-    }
-  }
-
+  const [inputValue, setInputValue, isFocused, setIsFocused, isButtonActive, addCurrency, error, textButton] = useAddNewCurrency()
+  
   return (
     <SafeAreaView style={styles.mainContainer}>
       <View style={styles.header}>
@@ -55,7 +33,7 @@ const AddCurrency: FC<IAddCurrencyProps> = ({navigation}) => {
         <Text style={styles.alert} >{error && error}</Text>
         <TouchableOpacity style={styles.buttonContainer} disabled={!isButtonActive} onPress={addCurrency}>
           <View style={styles.button}>
-            <Text style={[styles.textButton, {opacity: isButtonActive ? 1 : 0.2}]}>Add</Text>
+            <Text style={[styles.textButton, {opacity: isButtonActive ? 1 : 0.2}]}>{textButton}</Text>
           </View>
         </TouchableOpacity>
       </View>

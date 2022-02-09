@@ -5,7 +5,6 @@ export interface IGetCurrenciesAction {
   payload: ICurrency[];
 }
 export type ICurrenciesState = {
-  allCurrencies: ICurrency[]
   userCurrencyList: ICurrency[];
 }
 
