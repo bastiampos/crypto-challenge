@@ -1,14 +1,15 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
+import { useState } from 'react';
 import { Dispatch } from 'redux';
-import { ICurrency, IGetCurrenciesAction } from '../../types';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ADD_NEW_CRYPTOCURRENCY, GET_USER_CURRENCIES_FROM_ASYNC } from '../actionsTypes';
+import { ICurrency, IGetCurrenciesAction } from '../../types';
 import { IState } from '../reducers/mainReducer';
 import { AsyncKeys } from '../../types';
 
 export const getUserCurrenciesFromAsync = () => async (dispatch: Dispatch<IGetCurrenciesAction>) => {
   try {
     const userCurrencyList = await AsyncStorage.getItem(AsyncKeys.userCurrencyList)
-    
     if (userCurrencyList) {
       dispatch({
         type: GET_USER_CURRENCIES_FROM_ASYNC, 
@@ -20,31 +21,36 @@ export const getUserCurrenciesFromAsync = () => async (dispatch: Dispatch<IGetCu
   }
 }
 
-export const addCurrencyBySymbol = (valueSearched: string) => async (dispatch: Dispatch, getState: () => IState) => {
-  const {allCurrencies, userCurrencyList} = getState().currencies
+export const addCurrencyBySymbol = (valueSearched: string) => async (dispatch: Dispatch<IGetCurrenciesAction>, getState: () => IState) => {
+  const {userCurrencyList} = getState().currencies
 
-  const newCrypto: ICurrency | undefined  = allCurrencies.find( ({symbol, name}) => {
-    let isAdded: ICurrency | undefined  = userCurrencyList.find( ({symbol, name}) => (
-      symbol.toLowerCase() === valueSearched.toLowerCase() ||  name.toLowerCase() === valueSearched.toLowerCase()
-    ))
+  const host = 'https://data.messari.io/api/v1/assets'
+  const fields = 'metrics?fields=id,symbol,name,market_data/price_usd,market_data/percent_change_usd_last_24_hours'
 
-    return (symbol.toLowerCase() === valueSearched.toLowerCase() ||  name.toLowerCase() === valueSearched.toLowerCase()) && !isAdded
-  })
+  try {
+    const response = await axios.get(`${host}/${valueSearched.toLocaleLowerCase()}/${fields}`)
+    
+    if(response.data.data) {
+      const isAdded: ICurrency | undefined  = userCurrencyList.find( ({symbol, name}) => (
+        symbol.toLowerCase() === valueSearched.toLowerCase() ||  name.toLowerCase() === valueSearched.toLowerCase()
+      ))
 
-  if (newCrypto) {
-    const updatedUserCurrencies: ICurrency[] = [...userCurrencyList, newCrypto]
+      if (!isAdded) {
+        const updatedList = [...userCurrencyList, response.data.data]
+        dispatch({ type: ADD_NEW_CRYPTOCURRENCY, payload: updatedList }) 
 
-    dispatch({type: ADD_NEW_CRYPTOCURRENCY, payload: updatedUserCurrencies})
+        try {
+          await AsyncStorage.setItem(AsyncKeys.userCurrencyList, JSON.stringify(updatedList))
+        } catch (e) {
+          console.log(e)
+        }
 
-    try {
-      const updatedList: string = JSON.stringify(updatedUserCurrencies)
-      await AsyncStorage.setItem(AsyncKeys.userCurrencyList, updatedList)
-    } catch (e) {
-      console.log(e)
+        return true
+      }
     }
-
-    return true
-  } 
+  } catch (error) {
+    console.log(error)
+  }
   
   return false
 }

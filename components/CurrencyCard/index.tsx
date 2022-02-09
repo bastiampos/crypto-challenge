@@ -12,20 +12,24 @@ interface Props {
 const CurrencyCard: FC<Props> = ({currency}) => {
   const [isPositive, setIsPositive] = useState(false)
   const [price, setPrice] = useState('')
+  const [percentage, setPercentage] = useState(0)
+
+  const {id, name, symbol, market_data: {price_usd, percent_change_usd_last_24_hours}} = currency
 
   useEffect(() => {
     const priceFormat = new Intl.NumberFormat('en-US')
-    setIsPositive(currency.pctg >= 0)
-    setPrice(priceFormat.format(currency.price.toFixed(2)))
+    setIsPositive(percent_change_usd_last_24_hours >= 0)
+    setPrice(priceFormat.format(price_usd.toFixed(2)))
+    setPercentage(Math.abs(percent_change_usd_last_24_hours.toFixed(2)))
   }, [])
 
   return (
     <View style={styles.mainContainer}>
       <View style={styles.leftContainer}>
-        <Image style={styles.icon} source={{uri: currency.src}} />
+          <Image style={styles.icon} source={{uri: `https://messari.io/asset-images/${id}/128.png?v=2` }} />
         <View>
-          <Text style={styles.boldText}>{currency.name}</Text>
-          <Text>{currency.symbol}</Text>
+          <Text style={styles.boldText}>{name}</Text>
+          <Text>{symbol}</Text>
         </View>
       </View>
       <View style={styles.rightContainer}>
@@ -37,7 +41,7 @@ const CurrencyCard: FC<Props> = ({currency}) => {
             color={isPositive ? colors.darkGreen : colors.warning} 
           />
           <Text style={{color: isPositive ? colors.darkGreen : colors.warning}}>
-            {isPositive ? currency.pctg.toFixed(2) : currency.pctg.toFixed(2) *-1}%
+            {percentage}
           </Text>
         </View>
       </View>
