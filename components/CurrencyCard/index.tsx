@@ -1,6 +1,7 @@
 import { Text, View, Image } from 'react-native';
 import React, {FC, useEffect, useState} from 'react';
 import Icon from 'react-native-vector-icons/Feather'
+import {IMG_HOST} from '@env'
 import styles from './styles';
 import colors from '../../assets/stylesRoot/colors';
 Icon.loadFont()
@@ -13,7 +14,6 @@ const CurrencyCard: FC<Props> = ({currency}) => {
   const [isPositive, setIsPositive] = useState(false)
   const [price, setPrice] = useState('')
   const [percentage, setPercentage] = useState(0)
-  const [srcPicture, setSrcPicture] = useState('`https://messari.io/asset-images/id/128.png?v=2`')
 
   const {id, name, symbol, market_data: {price_usd, percent_change_usd_last_24_hours}} = currency
 
@@ -22,13 +22,12 @@ const CurrencyCard: FC<Props> = ({currency}) => {
     setIsPositive(percent_change_usd_last_24_hours >= 0)
     setPrice(priceFormat.format(price_usd.toFixed(2)))
     setPercentage(Math.abs(percent_change_usd_last_24_hours.toFixed(2)))
-    setSrcPicture(`https://messari.io/asset-images/${id}/128.png?v=2`)
   }, [])
 
   return (
     <View style={styles.mainContainer}>
       <View style={styles.leftContainer}>
-          <Image style={styles.icon} source={{uri: srcPicture }} />
+          <Image style={styles.icon} source={{uri: `${IMG_HOST}/${id}/128.png?v=2` }} />
         <View>
           <Text style={styles.boldText}>{name}</Text>
           <Text>{symbol}</Text>
