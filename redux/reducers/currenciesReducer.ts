@@ -1,5 +1,5 @@
 import { IGetCurrenciesAction, ICurrenciesState } from "../../types"
-import { ADD_NEW_CRYPTOCURRENCY, GET_USER_CURRENCIES_FROM_ASYNC } from '../actionsTypes';
+import { UPDATE_USER_CURRENCY_LIST } from '../actionsTypes';
 
 const initialState: ICurrenciesState = { 
   userCurrencyList: []
@@ -7,8 +7,7 @@ const initialState: ICurrenciesState = {
 
 const currenciesReducer = ( state: ICurrenciesState = initialState, {type, payload}: IGetCurrenciesAction): ICurrenciesState => {
   switch (type) {
-    case ADD_NEW_CRYPTOCURRENCY: 
-    case GET_USER_CURRENCIES_FROM_ASYNC:
+    case UPDATE_USER_CURRENCY_LIST: 
       return {
         ...state,
         userCurrencyList: payload

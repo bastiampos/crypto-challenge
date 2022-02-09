@@ -1,17 +1,18 @@
-import axios from 'axios';
+import axios, {AxiosResponse, AxiosError} from 'axios';
 import { Dispatch } from 'redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { ADD_NEW_CRYPTOCURRENCY, GET_USER_CURRENCIES_FROM_ASYNC } from '../actionsTypes';
+import { UPDATE_USER_CURRENCY_LIST } from '../actionsTypes';
 import { ICurrency, IGetCurrenciesAction } from '../../types';
 import { IState } from '../reducers/mainReducer';
 import { AsyncKeys } from '../../types';
+import { HOST } from "@env"
 
 export const getUserCurrenciesFromAsync = () => async (dispatch: Dispatch<IGetCurrenciesAction>) => {
   try {
     const userCurrencyList = await AsyncStorage.getItem(AsyncKeys.userCurrencyList)
     if (userCurrencyList) {
       dispatch({
-        type: GET_USER_CURRENCIES_FROM_ASYNC, 
+        type: UPDATE_USER_CURRENCY_LIST, 
         payload: JSON.parse(userCurrencyList)
       })
     }
@@ -20,36 +21,26 @@ export const getUserCurrenciesFromAsync = () => async (dispatch: Dispatch<IGetCu
   }
 }
 
-export const addCurrencyBySymbol = (valueSearched: string) => async (dispatch: Dispatch<IGetCurrenciesAction>, getState: () => IState) => {
+export const addCurrency = (valueSearched: string) => async (dispatch: Dispatch<IGetCurrenciesAction>, getState: () => IState) => {
   const {userCurrencyList} = getState().currencies
-
-  const host = 'https://data.messari.io/api/v1/assets'
   const fields = 'metrics?fields=id,symbol,name,market_data/price_usd,market_data/percent_change_usd_last_24_hours'
 
   try {
-    const response = await axios.get(`${host}/${valueSearched.toLocaleLowerCase()}/${fields}`)
-    
+    const response: AxiosResponse = await axios.get(`${HOST}/v1/assets/${valueSearched.toLowerCase()}/${fields}`)
+
     if(response.data.data) {
-      const isAdded: ICurrency | undefined  = userCurrencyList.find( ({symbol, name}) => (
-        symbol.toLowerCase() === valueSearched.toLowerCase() ||  name.toLowerCase() === valueSearched.toLowerCase()
-      ))
+      dispatch({ type: UPDATE_USER_CURRENCY_LIST, payload: [...userCurrencyList, response.data.data] }) 
 
-      if (!isAdded) {
-        const updatedList = [...userCurrencyList, response.data.data]
-        dispatch({ type: ADD_NEW_CRYPTOCURRENCY, payload: updatedList }) 
-
-        try {
-          await AsyncStorage.setItem(AsyncKeys.userCurrencyList, JSON.stringify(updatedList))
-        } catch (e) {
-          console.log(e)
-        }
-
-        return true
+      try {
+        await AsyncStorage.setItem(AsyncKeys.userCurrencyList, JSON.stringify([...userCurrencyList, response.data.data]))
+      } catch (e) {
+        console.log(e)
       }
     }
+
+    return response.data
   } catch (error) {
     console.log(error)
+    return error
   }
-  
-  return false
 }
