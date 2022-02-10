@@ -5,7 +5,7 @@ const initialState: ICurrenciesState = {
   userCurrencyList: []
 }
 
-const currenciesReducer = ( state: ICurrenciesState = initialState, {type, payload}: IGetCurrenciesAction): ICurrenciesState => {
+const currenciesReducer = ( state: ICurrenciesState = initialState, {type, payload}: IGetCurrenciesAction): ICurrenciesState => {  
   switch (type) {
     case UPDATE_USER_CURRENCY_LIST: 
       return {

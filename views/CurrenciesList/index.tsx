@@ -1,30 +1,36 @@
 import React, {useEffect} from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { Text, TouchableOpacity, View, Image, FlatList, ListRenderItem} from 'react-native';
-import {getUserCurrenciesFromAsync} from '../../redux/actions/currenciesActions';
+import { useSelector, useDispatch } from 'react-redux';
 import { IState } from '../../redux/reducers/mainReducer';
 import CurrencyCard from '../../components/CurrencyCard';
-import { useNavigation } from '@react-navigation/native';
-import styles from './styles';
-import { ICurrency } from '../../types';
 import { Routes } from '../../navigation/routes';
+import { ICurrency } from '../../types';
+import styles from './styles';
+import { updateCurrencyList, getUserCurrenciesFromAsync } from '../../redux/actions/currenciesActions';
 
-const Home = (): JSX.Element => {
-  const dispatch = useDispatch();
-  const {navigate}: any = useNavigation();
+const Home = ({navigation: {navigate}}: any): JSX.Element => {
+  const userCurrencyList = useSelector( (state: IState)=> state.currencies.userCurrencyList)
   const {ADD_CURRENCY} = Routes
+
+  const dispatch = useDispatch()
 
   useEffect(() => {
     dispatch(getUserCurrenciesFromAsync())
+
+    const intervalID = setInterval(() => {
+      dispatch(updateCurrencyList())
+    }, 25000)
+
+    return () => clearInterval(intervalID)
   }, [])
-  
-  const userCurrencyList = useSelector( (state: IState) => state.currencies.userCurrencyList );
+
+  const orderCurrencyList = (a: ICurrency, b: ICurrency) => a.name.localeCompare(b.name)
 
   const renderCurrencies: ListRenderItem<ICurrency> = ({item}) => <CurrencyCard key={item.symbol} currency={item} />
   
   return (
     <View style={styles.mainContainer}>
-      <View style={styles.headerContainer}>
+      <View style={styles.headerContainer}> 
         <Text style={styles.headerTitle}>CryptoTracker Pro</Text>
         <Image style={styles.userPhoto} source={{uri: 'https://i.imgur.com/kregEJT.png'}} />
       </View>
@@ -34,7 +40,7 @@ const Home = (): JSX.Element => {
           </View>
         }
         <FlatList
-          data={userCurrencyList}
+          data={userCurrencyList.sort(orderCurrencyList)}
           keyExtractor={(currency) => currency.symbol}
           renderItem={renderCurrencies}
         />
