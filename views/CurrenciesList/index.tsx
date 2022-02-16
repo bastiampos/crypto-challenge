@@ -10,19 +10,28 @@ import { updateCurrencyList, getUserCurrenciesFromAsync } from '../../redux/acti
 
 const Home = ({navigation: {navigate}}: any): JSX.Element => {
   const userCurrencyList = useSelector( (state: IState)=> state.currencies.userCurrencyList)
+  const isLoading = useSelector( (state: IState)=> state.currencies.isLoading)
   const {ADD_CURRENCY} = Routes
 
   const dispatch = useDispatch()
 
   useEffect(() => {
     dispatch(getUserCurrenciesFromAsync())
-
-    const intervalID = setInterval(() => {
-      dispatch(updateCurrencyList())
-    }, 25000)
-
-    return () => clearInterval(intervalID)
   }, [])
+
+  useEffect(() => {
+    if(isLoading) {
+      if(userCurrencyList.length > 0) {
+        const intervalID = setInterval(() => {
+          dispatch(updateCurrencyList())
+         }, 25000)
+
+        return () => clearInterval(intervalID)
+      }
+    }
+  }, [isLoading, userCurrencyList])
+
+  
 
   const orderCurrencyList = (a: ICurrency, b: ICurrency) => a.name.localeCompare(b.name)
 
@@ -35,15 +44,16 @@ const Home = ({navigation: {navigate}}: any): JSX.Element => {
         <Image style={styles.userPhoto} source={{uri: 'https://i.imgur.com/kregEJT.png'}} />
       </View>
       <View style={styles.currenciesContainer}>
-        {userCurrencyList?.length === 0 && <View style={styles.noCryptoContainer}>
+        {userCurrencyList.length > 0 
+          ? <FlatList
+              data={userCurrencyList.sort(orderCurrencyList)}
+              keyExtractor={({symbol}) => symbol}
+              renderItem={renderCurrencies}
+          />
+          : <View style={styles.noCryptoContainer}>
             <Text style={styles.noCryptoText}>You haven't added cryptocurrencies yet</Text>
           </View>
         }
-        <FlatList
-          data={userCurrencyList.sort(orderCurrencyList)}
-          keyExtractor={(currency) => currency.symbol}
-          renderItem={renderCurrencies}
-        />
         <View>
           <TouchableOpacity onPress={() => navigate(ADD_CURRENCY)}>
             <Text style={styles.button}>+ Add a Cryptocurrency</Text>

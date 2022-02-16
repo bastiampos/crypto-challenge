@@ -6,6 +6,7 @@ export interface IGetCurrenciesAction {
 }
 export type ICurrenciesState = {
   userCurrencyList: ICurrency[];
+  isLoading: boolean;
 }
 
 export enum AsyncKeys {

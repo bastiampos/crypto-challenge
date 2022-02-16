@@ -2,7 +2,8 @@ import { IGetCurrenciesAction, ICurrenciesState } from "../../types"
 import { UPDATE_USER_CURRENCY_LIST } from '../actionsTypes';
 
 const initialState: ICurrenciesState = { 
-  userCurrencyList: []
+  userCurrencyList: [],
+  isLoading: false
 }
 
 const currenciesReducer = ( state: ICurrenciesState = initialState, {type, payload}: IGetCurrenciesAction): ICurrenciesState => {  
@@ -10,7 +11,8 @@ const currenciesReducer = ( state: ICurrenciesState = initialState, {type, paylo
     case UPDATE_USER_CURRENCY_LIST: 
       return {
         ...state,
-        userCurrencyList: payload
+        userCurrencyList: payload,
+        isLoading: true
       }
     default:
       return state
