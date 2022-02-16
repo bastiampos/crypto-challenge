@@ -4,6 +4,8 @@ import Icon from 'react-native-vector-icons/Feather'
 import {IMG_HOST} from '@env'
 import styles from './styles';
 import colors from '../../assets/stylesRoot/colors';
+import { useSelector } from 'react-redux';
+import { IState } from '../../redux/reducers/mainReducer';
 Icon.loadFont()
 
 interface Props {
@@ -11,18 +13,20 @@ interface Props {
 }
 
 const CurrencyCard: FC<Props> = ({currency}) => {
+  const {id, name, symbol, market_data: {price_usd, percent_change_usd_last_24_hours}} = currency
+  const userCurrencyList = useSelector( (state: IState)=> state.currencies.userCurrencyList)
+
   const [isPositive, setIsPositive] = useState(false)
   const [price, setPrice] = useState('')
   const [percentage, setPercentage] = useState(0)
 
-  const {id, name, symbol, market_data: {price_usd, percent_change_usd_last_24_hours}} = currency
 
   useEffect(() => {
     const priceFormat = new Intl.NumberFormat('en-US')
     setIsPositive(percent_change_usd_last_24_hours >= 0)
     setPrice(priceFormat.format(price_usd.toFixed(2)))
     setPercentage(Math.abs(percent_change_usd_last_24_hours.toFixed(2)))
-  }, [])
+  }, [userCurrencyList])
 
   return (
     <View style={styles.mainContainer}>
